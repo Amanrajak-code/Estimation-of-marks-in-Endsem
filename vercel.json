@@ -1,14 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "api/**/*.py": {}
-  },
   "routes": [
     { "src": "/(.*)", "dest": "/ensem_marks_estimator_v1.html" }
   ]
 }
-
-
 
 
 
