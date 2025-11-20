@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Grade Calculator - Target Grade 9</title>
+    <title>Course Grade Calculator</title>
     <style>
         * {
             box-sizing: border-box;
@@ -29,11 +29,7 @@
             padding: 30px;
             backdrop-filter: blur(10px);
         }
-        footer{
 
-            background-color: black;
-            
-        }
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -44,7 +40,7 @@
         h1 {
             color: #2c3e50;
             margin-bottom: 10px;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
         }
         
         .description {
@@ -59,21 +55,22 @@
         }
         
         .tabs {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-bottom: 20px;
         }
         
         .tab {
-            padding: 12px 25px;
+            padding: 12px 20px;
             background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
-            border-radius: 8px 8px 0 0;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             color: #7f8c8d;
             transition: all 0.3s ease;
+            text-align: center;
         }
         
         .tab:hover {
@@ -89,7 +86,7 @@
         .tab-content {
             display: none;
             background-color: white;
-            border-radius: 0 10px 10px 10px;
+            border-radius: 10px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -133,6 +130,7 @@
         
         .input-group {
             margin-bottom: 15px;
+            position: relative;
         }
         
         .input-group label {
@@ -157,69 +155,78 @@
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
         }
         
+        input[type="number"].error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
         .course-result {
             margin-top: 25px;
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 8px;
-            text-align: center;
             border: 1px solid #eaeaea;
         }
         
-        .current-grade {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #ddd;
-        }
-        
-        .current-percentage {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .current-letter {
-            font-size: 1.5rem;
-            color: #7f8c8d;
-        }
-        
         .target-info {
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .target-block {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         .target-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: #2c3e50;
             margin-bottom: 10px;
+            font-weight: 600;
         }
         
         .target-marks {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .target-message {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #7f8c8d;
-            font-style: italic;
         }
         
-        .grade-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            margin: 0 auto 20px;
+        .encouragement-message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .encouragement-text {
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        
+        .good-luck-text {
+            color: #3498db;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
         
         .action-buttons {
@@ -250,14 +257,10 @@
             transform: translateY(-2px);
         }
         
-        .btn-success {
-            background-color: #2ecc71;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background-color: #27ae60;
-            transform: translateY(-2px);
+        .btn-primary:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .btn-danger {
@@ -285,25 +288,48 @@
         }
         
         @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
             .input-row {
                 grid-template-columns: 1fr;
-            }
-            
-            .tabs {
-                flex-direction: column;
-            }
-            
-            .tab {
-                border-radius: 8px;
-                margin-bottom: 5px;
+                gap: 10px;
             }
             
             .tab-content {
-                border-radius: 0 0 10px 10px;
+                padding: 15px;
             }
             
             .action-buttons {
                 flex-direction: column;
+            }
+            
+            .target-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .target-block {
+                padding: 10px;
+            }
+            
+            .target-title {
+                font-size: 1rem;
+            }
+            
+            .target-marks {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .tabs {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
@@ -311,8 +337,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>Course Grade Calculator - Target Grade 9</h1>
-            <p class="description">Calculate how much marks you need in Endsem to achieve a grade of 9 in each course. (Absoulte grading is under consideration)</p>
+            <h1>Course Grade Calculator</h1>
+            <p class="description">Calculate how much marks you need in Endsem to achieve your target grade in each course. (Absolute grading is under consideration)</p>
         </header>
         
         <div class="tabs-container">
@@ -336,20 +362,24 @@
                     <div class="input-group">
                         <label for="me1102-quiz1">Quiz 1 (25 marks)</label>
                         <input type="number" id="me1102-quiz1" min="0" max="25" placeholder="Enter score (0-25)">
+                        <div class="error-message" id="me1102-quiz1-error">Please enter a value between 0 and 25</div>
                     </div>
                     <div class="input-group">
                         <label for="me1102-quiz2">Quiz 2 (25 marks)</label>
                         <input type="number" id="me1102-quiz2" min="0" max="25" placeholder="Enter score (0-25)">
+                        <div class="error-message" id="me1102-quiz2-error">Please enter a value between 0 and 25</div>
                     </div>
                 </div>
                 <div class="input-row">
                     <div class="input-group">
                         <label for="me1102-s1">Submission 1 (10 marks)</label>
                         <input type="number" id="me1102-s1" min="0" max="10" placeholder="Enter score (0-10)">
+                        <div class="error-message" id="me1102-s1-error">Please enter a value between 0 and 10</div>
                     </div>
                     <div class="input-group">
                         <label for="me1102-s2">Submission 2 (10 marks)</label>
                         <input type="number" id="me1102-s2" min="0" max="10" placeholder="Enter score (0-10)">
+                        <div class="error-message" id="me1102-s2-error">Please enter a value between 0 and 10</div>
                     </div>
                 </div>
                 
@@ -357,10 +387,12 @@
                     <div class="input-group">
                         <label for="me1102-midsem">Midsem (100 marks)</label>
                         <input type="number" id="me1102-midsem" min="0" max="100" placeholder="Enter score (0-100)">
+                        <div class="error-message" id="me1102-midsem-error">Please enter a value between 0 and 100</div>
                     </div>
                     <div class="input-group">
                         <label for="me1102-attendance">Attendance (41 classes)</label>
                         <input type="number" id="me1102-attendance" min="0" max="48" placeholder="Enter classes attended (0-41)">
+                        <div class="error-message" id="me1102-attendance-error">Please enter a value between 0 and 41</div>
                     </div>
                 </div>
                 
@@ -369,14 +401,26 @@
                         Enter your current scores to calculate required Endsem marks
                     </div>
                     <div id="me1102-results" style="display: none;">
-                        <div class="current-grade">
-                            <div class="current-percentage" id="me1102-current-percentage">0%</div>
-                            <div class="current-letter" id="me1102-current-grade">Current Grade: -</div>
-                        </div>
                         <div class="target-info">
-                            <div class="target-title">To achieve Grade 9 (90%):</div>
-                            <div class="target-marks" id="me1102-target-marks">0 marks</div>
-                            <div class="target-message" id="me1102-target-message">needed in Endsem (100 marks)</div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 10 (90%)</div>
+                                <div class="target-marks" id="me1102-target-marks-10">0 marks</div>
+                                <div class="target-message" id="me1102-target-message-10">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 9 (80%)</div>
+                                <div class="target-marks" id="me1102-target-marks-9">0 marks</div>
+                                <div class="target-message" id="me1102-target-message-9">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 8 (70%)</div>
+                                <div class="target-marks" id="me1102-target-marks-8">0 marks</div>
+                                <div class="target-message" id="me1102-target-message-8">needed in Endsem</div>
+                            </div>
+                        </div>
+                        <div class="encouragement-message">
+                            <div class="encouragement-text">This is indicative, try your best!</div>
+                            <div class="good-luck-text">Best of luck for End Sem!</div>
                         </div>
                     </div>
                 </div>
@@ -394,6 +438,7 @@
                     <div class="input-group">
                         <label for="ma1101-midsem">Midsem + Q1 + Q2 (45 marks)</label>
                         <input type="number" id="ma1101-midsem" min="0" max="45" placeholder="Enter score (0-45)">
+                        <div class="error-message" id="ma1101-midsem-error">Please enter a value between 0 and 45</div>
                     </div>
                 </div>                
 
@@ -401,10 +446,12 @@
                     <div class="input-group">
                         <label for="ma1101-quiz3">Quiz 3 (10 marks)</label>
                         <input type="number" id="ma1101-quiz3" min="0" max="10" placeholder="Enter score (0-10)">
+                        <div class="error-message" id="ma1101-quiz3-error">Please enter a value between 0 and 10</div>
                     </div>
                     <div class="input-group">
                         <label for="ma1101-quiz4">Quiz 4 (10 marks)</label>
                         <input type="number" id="ma1101-quiz4" min="0" max="10" placeholder="Enter score (0-10)">
+                        <div class="error-message" id="ma1101-quiz4-error">Please enter a value between 0 and 10</div>
                     </div>
                 </div>
                 
@@ -414,14 +461,26 @@
                         Enter your current scores to calculate required Endsem marks
                     </div>
                     <div id="ma1101-results" style="display: none;">
-                        <div class="current-grade">
-                            <div class="current-percentage" id="ma1101-current-percentage">0%</div>
-                            <div class="current-letter" id="ma1101-current-grade">Current Grade: -</div>
-                        </div>
                         <div class="target-info">
-                            <div class="target-title">To achieve Grade 9 (90%):</div>
-                            <div class="target-marks" id="ma1101-target-marks">0 marks</div>
-                            <div class="target-message" id="ma1101-target-message">needed in Endsem (35 marks)</div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 10 (90%)</div>
+                                <div class="target-marks" id="ma1101-target-marks-10">0 marks</div>
+                                <div class="target-message" id="ma1101-target-message-10">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 9 (80%)</div>
+                                <div class="target-marks" id="ma1101-target-marks-9">0 marks</div>
+                                <div class="target-message" id="ma1101-target-message-9">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 8 (70%)</div>
+                                <div class="target-marks" id="ma1101-target-marks-8">0 marks</div>
+                                <div class="target-message" id="ma1101-target-message-8">needed in Endsem</div>
+                            </div>
+                        </div>
+                        <div class="encouragement-message">
+                            <div class="encouragement-text">This is indicative, try your best!</div>
+                            <div class="good-luck-text">Best of luck for End Sem!</div>
                         </div>
                     </div>
                 </div>
@@ -440,30 +499,36 @@
                     <div class="input-group">
                         <label for="cs1101-quiz1">Quiz 1 (20 marks)</label>
                         <input type="number" id="cs1101-quiz1" min="0" max="20" placeholder="Enter score (0-20)">
+                        <div class="error-message" id="cs1101-quiz1-error">Please enter a value between 0 and 20</div>
                     </div>
                     <div class="input-group">
                         <label for="cs1101-quiz2">Quiz 2 (20 marks)</label>
                         <input type="number" id="cs1101-quiz2" min="0" max="20" placeholder="Enter score (0-20)">
+                        <div class="error-message" id="cs1101-quiz2-error">Please enter a value between 0 and 20</div>
                     </div>
                 </div>
                 <div class="input-row">
                     <div class="input-group">
                         <label for="cs1101-midsemlab">Midsem Lab (100 marks)</label>
                         <input type="number" id="cs1101-midsemlab" min="0" max="100" placeholder="Enter score (0-100)">
+                        <div class="error-message" id="cs1101-midsemlab-error">Please enter a value between 0 and 100</div>
                     </div>
                     <div class="input-group">
                         <label for="cs1101-endsemlab">Endsem Lab (100 marks)</label>
                         <input type="number" id="cs1101-endsemlab" min="0" max="100" placeholder="Enter score (0-100)">
+                        <div class="error-message" id="cs1101-endsemlab-error">Please enter a value between 0 and 100</div>
                     </div>
                 </div>
                 <div class="input-row">
                        <div class="input-group">
                         <label for="cs1101-assg">Sum of Best 8 assignment (160 marks)</label>
-                        <input type="number" id="cs1101-assg" min="0" max="160" placeholder="Enter score (0-150)">
+                        <input type="number" id="cs1101-assg" min="0" max="160" placeholder="Enter score (0-160)">
+                        <div class="error-message" id="cs1101-assg-error">Please enter a value between 0 and 160</div>
                     </div>
                     <div class="input-group">
                         <label for="cs1101-midsem">Midsem (100 marks)</label>
                         <input type="number" id="cs1101-midsem" min="0" max="100" placeholder="Enter score (0-100)">
+                        <div class="error-message" id="cs1101-midsem-error">Please enter a value between 0 and 100</div>
                     </div>
                 </div>
                 
@@ -472,14 +537,26 @@
                         Enter your current scores to calculate required Endsem marks
                     </div>
                     <div id="cs1101-results" style="display: none;">
-                        <div class="current-grade">
-                            <div class="current-percentage" id="cs1101-current-percentage">0%</div>
-                            <div class="current-letter" id="cs1101-current-grade">Current Grade: -</div>
-                        </div>
                         <div class="target-info">
-                            <div class="target-title">To achieve Grade 9 (90%):</div>
-                            <div class="target-marks" id="cs1101-target-marks">0 marks</div>
-                            <div class="target-message" id="cs1101-target-message">needed in Endsem (100 marks)</div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 10 (90%)</div>
+                                <div class="target-marks" id="cs1101-target-marks-10">0 marks</div>
+                                <div class="target-message" id="cs1101-target-message-10">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 9 (80%)</div>
+                                <div class="target-marks" id="cs1101-target-marks-9">0 marks</div>
+                                <div class="target-message" id="cs1101-target-message-9">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 8 (70%)</div>
+                                <div class="target-marks" id="cs1101-target-marks-8">0 marks</div>
+                                <div class="target-message" id="cs1101-target-message-8">needed in Endsem</div>
+                            </div>
+                        </div>
+                        <div class="encouragement-message">
+                            <div class="encouragement-text">This is indicative, try your best!</div>
+                            <div class="good-luck-text">Best of luck for End Sem!</div>
                         </div>
                     </div>
                 </div>
@@ -498,16 +575,12 @@
                     <div class="input-group">
                         <label for="ch1101-quiz1">Quiz 1 (Physical) (20 marks)</label>
                         <input type="number" id="ch1101-quiz1" min="0" max="20" placeholder="Enter score (0-20)">
+                        <div class="error-message" id="ch1101-quiz1-error">Please enter a value between 0 and 20</div>
                     </div>
                     <div class="input-group">
-                        <label for="ch1101-quiz2">Quiz 2 (Organic) (20 marks)</label>
+                        <label for="ch1101-quiz2">Quiz 2 (Organic + Inorganic) (20 marks)</label>
                         <input type="number" id="ch1101-quiz2" min="0" max="20" placeholder="Enter score (0-20)">
-                    </div>
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="ch1101-quiz3">Quiz 3 (Inorganic) (20 marks)</label>
-                        <input type="number" id="ch1101-quiz3" min="0" max="20" placeholder="Enter score (0-20)">
+                        <div class="error-message" id="ch1101-quiz2-error">Please enter a value between 0 and 20</div>
                     </div>
                 </div>
                 
@@ -515,6 +588,7 @@
                     <div class="input-group">
                         <label for="ch1101-midsem">Midsem (30 marks)</label>
                         <input type="number" id="ch1101-midsem" min="0" max="30" placeholder="Enter score (0-30)">
+                        <div class="error-message" id="ch1101-midsem-error">Please enter a value between 0 and 30</div>
                     </div>
                 </div>
                 
@@ -523,14 +597,26 @@
                         Enter your current scores to calculate required Endsem marks
                     </div>
                     <div id="ch1101-results" style="display: none;">
-                        <div class="current-grade">
-                            <div class="current-percentage" id="ch1101-current-percentage">0%</div>
-                            <div class="current-letter" id="ch1101-current-grade">Current Grade: -</div>
-                        </div>
                         <div class="target-info">
-                            <div class="target-title">To achieve Grade 9:</div>
-                            <div class="target-marks" id="ch1101-target-marks">0 marks</div>
-                            <div class="target-message" id="ch1101-target-message">needed in Endsem (50 marks)</div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 10 </div>
+                                <div class="target-marks" id="ch1101-target-marks-10">0 marks</div>
+                                <div class="target-message" id="ch1101-target-message-10">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 9 </div>
+                                <div class="target-marks" id="ch1101-target-marks-9">0 marks</div>
+                                <div class="target-message" id="ch1101-target-message-9">needed in Endsem</div>
+                            </div>
+                            <div class="target-block">
+                                <div class="target-title">Grade 8 </div>
+                                <div class="target-marks" id="ch1101-target-marks-8">0 marks</div>
+                                <div class="target-message" id="ch1101-target-message-8">needed in Endsem</div>
+                            </div>
+                        </div>
+                        <div class="encouragement-message">
+                            <div class="encouragement-text">This is indicative, try your best!</div>
+                            <div class="good-luck-text">Best of luck for End Sem!</div>
                         </div>
                     </div>
                 </div>
@@ -543,7 +629,7 @@
         </div>
         
         <footer>
-            <p>Course Grade Calculator - Target Grade 9 &copy; 2025 | Created by A.Raj</p>
+            <p style="font-family: cursive; color: black;">Course Grade Calculator &copy; 2025 | Designed by A... Raj</p>
         </footer>
     </div>
 
@@ -569,20 +655,33 @@
                 });
             });
             
-            // Add event listeners to all input fields
+            // Add event listeners to all input fields for validation
             document.querySelectorAll('input[type="number"]').forEach(input => {
                 input.addEventListener('input', function() {
+                    validateInput(this);
+                    
                     // Clear results when input changes
                     const tabContent = this.closest('.tab-content');
                     const courseId = tabContent.id;
                     document.getElementById(`${courseId}-results`).style.display = 'none';
                     document.getElementById(`${courseId}-empty`).style.display = 'block';
+                    
+                    // Update calculate button state
+                    updateCalculateButtonState();
+                });
+                
+                // Also validate on blur (when user leaves the field)
+                input.addEventListener('blur', function() {
+                    validateInput(this);
+                    updateCalculateButtonState();
                 });
             });
             
             // Calculate current course button
             document.getElementById('calculate-current').addEventListener('click', function() {
-                calculateCourseGrade(currentActiveTab);
+                if (validateCurrentTab()) {
+                    calculateCourseGrade(currentActiveTab);
+                }
             });
             
             // Reset all button
@@ -590,40 +689,117 @@
                 if (confirm('Are you sure you want to reset all scores?')) {
                     document.querySelectorAll('input[type="number"]').forEach(input => {
                         input.value = '';
+                        input.classList.remove('error');
+                        const errorId = input.id + '-error';
+                        document.getElementById(errorId).style.display = 'none';
                     });
                     resetAllCourses();
+                    updateCalculateButtonState();
                 }
             });
+            
+            // Validate a single input field
+            function validateInput(input) {
+                const min = parseFloat(input.getAttribute('min'));
+                const max = parseFloat(input.getAttribute('max'));
+                const value = parseFloat(input.value);
+                const errorElement = document.getElementById(input.id + '-error');
+                
+                // If input is empty, remove error styling
+                if (input.value === '') {
+                    input.classList.remove('error');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
+                
+                // Check if value is within range
+                if (isNaN(value) || value < min || value > max) {
+                    input.classList.add('error');
+                    errorElement.style.display = 'block';
+                    return false;
+                } else {
+                    input.classList.remove('error');
+                    errorElement.style.display = 'none';
+                    return true;
+                }
+            }
+            
+            // Validate all inputs in the current tab
+            function validateCurrentTab() {
+                const currentTab = document.getElementById(currentActiveTab);
+                const inputs = currentTab.querySelectorAll('input[type="number"]');
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (!validateInput(input)) {
+                        isValid = false;
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            // Update calculate button state based on validation
+            function updateCalculateButtonState() {
+                const calculateBtn = document.getElementById('calculate-current');
+                const currentTab = document.getElementById(currentActiveTab);
+                const inputs = currentTab.querySelectorAll('input[type="number"]');
+                let hasAtLeastOneValue = false;
+                
+                // Check if at least one input has a value
+                inputs.forEach(input => {
+                    if (input.value !== '') {
+                        hasAtLeastOneValue = true;
+                    }
+                });
+                
+                // Enable button only if there's at least one value and no errors
+                if (hasAtLeastOneValue && validateCurrentTab()) {
+                    calculateBtn.disabled = false;
+                } else {
+                    calculateBtn.disabled = true;
+                }
+            }
             
             // Calculate grade for a specific course
             function calculateCourseGrade(courseId) {
                 let currentPercentage = 0;
-                let requiredEndsemMarks = 0;
+                let requiredEndsemMarks8 = 0;
+                let requiredEndsemMarks9 = 0;
+                let requiredEndsemMarks10 = 0;
                 let maxEndsemMarks = 0;
                 
                 switch(courseId) {
                     case 'me1102':
                         const me1102Result = calculateME1102();
                         currentPercentage = me1102Result.currentPercentage;
-                        requiredEndsemMarks = me1102Result.requiredEndsemMarks;
+                        requiredEndsemMarks8 = me1102Result.requiredEndsemMarks8;
+                        requiredEndsemMarks9 = me1102Result.requiredEndsemMarks9;
+                        requiredEndsemMarks10 = me1102Result.requiredEndsemMarks10;
                         maxEndsemMarks = 100;
                         break;
                     case 'ma1101':
                         const ma1101Result = calculateMA1101();
                         currentPercentage = ma1101Result.currentPercentage;
-                        requiredEndsemMarks = ma1101Result.requiredEndsemMarks;
+                        requiredEndsemMarks8 = ma1101Result.requiredEndsemMarks8;
+                        requiredEndsemMarks9 = ma1101Result.requiredEndsemMarks9;
+                        requiredEndsemMarks10 = ma1101Result.requiredEndsemMarks10;
                         maxEndsemMarks = 35;
                         break;
                     case 'cs1101':
                         const cs1101Result = calculateCS1101();
                         currentPercentage = cs1101Result.currentPercentage;
-                        requiredEndsemMarks = cs1101Result.requiredEndsemMarks;
+                        requiredEndsemMarks8 = cs1101Result.requiredEndsemMarks8;
+                        requiredEndsemMarks9 = cs1101Result.requiredEndsemMarks9;
+                        requiredEndsemMarks10 = cs1101Result.requiredEndsemMarks10;
                         maxEndsemMarks = 100;
                         break;
                     case 'ch1101':
                         const ch1101Result = calculateCH1101();
                         currentPercentage = ch1101Result.currentPercentage;
-                        requiredEndsemMarks = ch1101Result.requiredEndsemMarks;
+                        requiredEndsemMarks8 = ch1101Result.requiredEndsemMarks8;
+                        requiredEndsemMarks9 = ch1101Result.requiredEndsemMarks9;
+                        requiredEndsemMarks10 = ch1101Result.requiredEndsemMarks10;
                         maxEndsemMarks = 50;
                         break;
                 }
@@ -631,10 +807,6 @@
                 // Update the course result display
                 const emptyElement = document.getElementById(`${courseId}-empty`);
                 const resultsElement = document.getElementById(`${courseId}-results`);
-                const currentPercentageElement = document.getElementById(`${courseId}-current-percentage`);
-                const currentGradeElement = document.getElementById(`${courseId}-current-grade`);
-                const targetMarksElement = document.getElementById(`${courseId}-target-marks`);
-                const targetMessageElement = document.getElementById(`${courseId}-target-message`);
                 
                 if (isNaN(currentPercentage) || currentPercentage === 0) {
                     emptyElement.style.display = 'block';
@@ -643,23 +815,41 @@
                     emptyElement.style.display = 'none';
                     resultsElement.style.display = 'block';
                     
-                    currentPercentageElement.textContent = currentPercentage.toFixed(1) + '%';
-                    currentGradeElement.textContent = 'Current Grade: ' + getLetterGrade(currentPercentage);
+                    // Update all target marks
+                    updateTargetDisplay(courseId, '8', requiredEndsemMarks8, maxEndsemMarks);
+                    updateTargetDisplay(courseId, '9', requiredEndsemMarks9, maxEndsemMarks);
+                    updateTargetDisplay(courseId, '10', requiredEndsemMarks10, maxEndsemMarks);
+                }
+            }
+            
+            function updateTargetDisplay(courseId, grade, requiredMarks, maxMarks) {
+                const targetMarksElement = document.getElementById(`${courseId}-target-marks-${grade}`);
+                const targetMessageElement = document.getElementById(`${courseId}-target-message-${grade}`);
+                
+                if (requiredMarks <= maxMarks && requiredMarks >= 0) {
+                    targetMarksElement.textContent = requiredMarks.toFixed(1) + ' marks';
+                    targetMessageElement.textContent = `needed in Endsem (${maxMarks} marks)`;
                     
-                    if (requiredEndsemMarks <= maxEndsemMarks) {
-                        targetMarksElement.textContent = requiredEndsemMarks.toFixed(1) + ' marks';
-                        targetMessageElement.textContent = `needed in Endsem (${maxEndsemMarks} marks)`;
-                        targetMarksElement.style.color = requiredEndsemMarks <= maxEndsemMarks * 0.7 ? '#2ecc71' : '#e74c3c';
+                    // Color coding based on difficulty
+                    if (requiredMarks <= maxMarks * 0.5) {
+                        targetMarksElement.style.color = '#2ecc71'; // Green
+                    } else if (requiredMarks <= maxMarks * 0.75) {
+                        targetMarksElement.style.color = '#f39c12'; // Orange
                     } else {
-                        targetMarksElement.textContent = 'Not Possible';
-                        targetMessageElement.textContent = `You need more than ${maxEndsemMarks} marks in Endsem`;
-                        targetMarksElement.style.color = '#e74c3c';
+                        targetMarksElement.style.color = '#e74c3c'; // Red
                     }
+                } else if (requiredMarks < 0) {
+                    targetMarksElement.textContent = 'Already Achieved';
+                    targetMessageElement.textContent = `You've already reached Grade ${grade}`;
+                    targetMarksElement.style.color = '#2ecc71';
+                } else {
+                    targetMarksElement.textContent = 'Not Possible';
+                    targetMessageElement.textContent = `You need more than ${maxMarks} marks`;
+                    targetMarksElement.style.color = '#e74c3c';
                 }
             }
             
             // ME1102 Calculation Function
-            // (B2+C2)*20/50 +(D2+E2)*10/20 + F2*25/100 + G2*35/100 + H2
             function calculateME1102() {
                 const quiz1 = (parseFloat(document.getElementById('me1102-quiz1').value) || 0);
                 const quiz2 = (parseFloat(document.getElementById('me1102-quiz2').value) || 0);
@@ -670,13 +860,12 @@
   
                 let attend = 0;
                 if (attendance >= 95) {
-                    attend=10 ; 
+                    attend = 10; 
                 } 
                 else if (attendance >= 90) {
                     attend = 8;
                 }
                 else if (attendance >= 85) {
-                   // console.log("Entered");
                     attend = 6;
                 } 
                 else if (attendance >= 80) {
@@ -686,55 +875,62 @@
                     attend = 2;
                 }  
                 else {
-                    const attend = 0;
+                    attend = 0;
                 }
 
                 const currentPercentage = (quiz1 + quiz2)*20/40 + (s1 + s2)*10/20 + midsem*25/100 + attend;
-                console.log("The value of myVariable is:", attendance);
-                console.log("The value of myVariable is:", attend);
-
-                const requiredEndsemMarks = (80 - currentPercentage) / 35 * 100;
+                
+                const requiredEndsemMarks8 = (70 - currentPercentage) / 35 * 100;
+                const requiredEndsemMarks9 = (80 - currentPercentage) / 35 * 100;
+                const requiredEndsemMarks10 = (90 - currentPercentage) / 35 * 100;
                 
                 return {
                     currentPercentage: currentPercentage,
-                    requiredEndsemMarks: requiredEndsemMarks
+                    requiredEndsemMarks8: requiredEndsemMarks8,
+                    requiredEndsemMarks9: requiredEndsemMarks9,
+                    requiredEndsemMarks10: requiredEndsemMarks10
                 };
             }
             
             // MA1101 Calculation Function
             function calculateMA1101() {
-               // const quiz1 = (parseFloat(document.getElementById('ma1101-quiz1').value) || 0) / 10 * 10;
-                //const quiz2 = (parseFloat(document.getElementById('ma1101-quiz2').value) || 0) / 10 * 10;
-                const quiz3 = (parseFloat(document.getElementById('ma1101-quiz3').value) || 0) / 10 * 10;
-                const quiz4 = (parseFloat(document.getElementById('ma1101-quiz4').value) || 0) / 10 * 10;
-                const midsem = (parseFloat(document.getElementById('ma1101-midsem').value) || 0) / 45 * 45;
+                const quiz3 = (parseFloat(document.getElementById('ma1101-quiz3').value) || 0);
+                const quiz4 = (parseFloat(document.getElementById('ma1101-quiz4').value) || 0);
+                const midsem = (parseFloat(document.getElementById('ma1101-midsem').value) || 0);
                 
-                const currentPercentage =  quiz3 + quiz4 + midsem;
-                const requiredEndsemMarks = 80 - currentPercentage;
+                const currentPercentage = quiz3 + quiz4 + midsem;
+                const requiredEndsemMarks8 = 70 - currentPercentage;
+                const requiredEndsemMarks9 = 80 - currentPercentage;
+                const requiredEndsemMarks10 = 90 - currentPercentage;
                 
                 return {
                     currentPercentage: currentPercentage,
-                    requiredEndsemMarks: requiredEndsemMarks
+                    requiredEndsemMarks8: requiredEndsemMarks8,
+                    requiredEndsemMarks9: requiredEndsemMarks9,
+                    requiredEndsemMarks10: requiredEndsemMarks10
                 };
             }
             
             // CS1101 Calculation Function
-          //  (B2+C2)*20/40*2/3 +(D2)*60/160/3 + F2*30/100*2/3 + G2*50/100*2/3 + H2*20/100/3 +E2*20/100/3
             function calculateCS1101() {
-                const quiz1 = (parseFloat(document.getElementById('cs1101-quiz1').value) || 0)
-                const quiz2 = (parseFloat(document.getElementById('cs1101-quiz2').value) || 0)
+                const quiz1 = (parseFloat(document.getElementById('cs1101-quiz1').value) || 0);
+                const quiz2 = (parseFloat(document.getElementById('cs1101-quiz2').value) || 0);
                 const midsemlab = (parseFloat(document.getElementById('cs1101-midsemlab').value) || 0);
                 const endsemlab = (parseFloat(document.getElementById('cs1101-endsemlab').value) || 0);
                 const assg = (parseFloat(document.getElementById('cs1101-assg').value) || 0);
-
                 const midsem = (parseFloat(document.getElementById('cs1101-midsem').value) || 0);
                 
                 const currentPercentage = ((quiz1 + quiz2)*20/40 + midsem*30/100)*2/3 + (midsemlab*20/100 + endsemlab*20/100+ assg*60/160)/3 ;
-                const requiredEndsemMarks = (80 - currentPercentage) *100/50*3/2;
+                
+                const requiredEndsemMarks8 = (70 - currentPercentage) *100/50*3/2;
+                const requiredEndsemMarks9 = (80 - currentPercentage) *100/50*3/2;
+                const requiredEndsemMarks10 = (90 - currentPercentage) *100/50*3/2;
                 
                 return {
                     currentPercentage: currentPercentage,
-                    requiredEndsemMarks: requiredEndsemMarks
+                    requiredEndsemMarks8: requiredEndsemMarks8,
+                    requiredEndsemMarks9: requiredEndsemMarks9,
+                    requiredEndsemMarks10: requiredEndsemMarks10
                 };
             }
             
@@ -742,15 +938,19 @@
             function calculateCH1101() {
                 const quiz1 = (parseFloat(document.getElementById('ch1101-quiz1').value) || 0);
                 const quiz2 = (parseFloat(document.getElementById('ch1101-quiz2').value) || 0);
-                const quiz3 = (parseFloat(document.getElementById('ch1101-quiz3').value) || 0);
-                const midsem = (parseFloat(document.getElementById('ch1101-midsem').value) || 0) / 30 * 30;
+             //   const quiz3 = (parseFloat(document.getElementById('ch1101-quiz3').value) || 0);
+                const midsem = (parseFloat(document.getElementById('ch1101-midsem').value) || 0);
                 
-                const currentPercentage = (quiz1 + quiz2 + quiz3)*20/60 + midsem;
-                const requiredEndsemMarks = 80 - currentPercentage;
+                const currentPercentage = (quiz1 + quiz2)*20/40 + midsem;
+                const requiredEndsemMarks8 = 70 - currentPercentage;
+                const requiredEndsemMarks9 = 80 - currentPercentage;
+                const requiredEndsemMarks10 = 90 - currentPercentage;
                 
                 return {
                     currentPercentage: currentPercentage,
-                    requiredEndsemMarks: requiredEndsemMarks
+                    requiredEndsemMarks8: requiredEndsemMarks8,
+                    requiredEndsemMarks9: requiredEndsemMarks9,
+                    requiredEndsemMarks10: requiredEndsemMarks10
                 };
             }
             
@@ -763,19 +963,8 @@
                 });
             }
             
-            // Convert percentage to letter grade
-            function getLetterGrade(percentage) {
-                if (percentage >= 90) return 'A+';
-                if (percentage >= 85) return 'A';
-                if (percentage >= 80) return 'A-';
-                if (percentage >= 75) return 'B+';
-                if (percentage >= 70) return 'B';
-                if (percentage >= 65) return 'B-';
-                if (percentage >= 60) return 'C+';
-                if (percentage >= 55) return 'C';
-                if (percentage >= 50) return 'C-';
-                return 'F';
-            }
+            // Initialize calculate button state
+            updateCalculateButtonState();
         });
     </script>
 </body>
