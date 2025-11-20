@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    html_path = os.path.join(os.path.dirname(__file__), "ensem_marks_estimator_v1.html")
+    html_path = os.path.join(os.path.dirname(__file__),"..", "ensem_marks_estimator_v1.html")
 
     with open(html_path, "r", encoding="utf-8") as f:
         html = f.read()
@@ -14,3 +14,4 @@ def index():
 
 # Vercel handler
 handler = app
+
